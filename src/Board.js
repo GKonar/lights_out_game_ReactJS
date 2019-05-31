@@ -19,7 +19,8 @@ class Board extends Component {
 		};
 		this.flipCellsAroundMe = this.flipCellsAroundMe.bind(this);
 		this.playAgain = this.playAgain.bind(this);
-		this.randomBoard = this.randomBoard.bind(this);
+		this.randomMove = this.randomMove.bind(this);
+		this.handleRandomMoves = this.handleRandomMoves.bind(this);
 	}
 
 	/** create a board nrows high/ncols wide, each cell randomly lit or unlit */
@@ -36,11 +37,18 @@ class Board extends Component {
 		return board;
 	}
 
-	randomBoard() {
+	randomMove() {
 		let guess = Math.floor(Math.random() * this.props.nrows); // value from 0 to 4
 		let guess_2 = Math.floor(Math.random() * this.props.ncols); // value from 0 to 4
 
 		this.flipCellsAroundMe(`${guess}-${guess_2}`);
+	}
+
+	handleRandomMoves() {
+		const numOfMoves = Math.floor(Math.random() * 5) + 3; // number of moves when game starts
+		for (let i = 0; i < numOfMoves; i++) {
+			this.randomMove();
+		}
 	}
 
 	/** handle changing a cell: update board & determine if winner */
@@ -71,21 +79,12 @@ class Board extends Component {
 	}
 
 	playAgain() {
-		const numOfMoves = Math.floor(Math.random() * 5) + 3;
-
+		this.handleRandomMoves();
 		this.setState({ hasWon: false });
-		for (let i = 0; i < numOfMoves; i++) {
-			this.randomBoard();
-		}
 	}
 
 	componentDidMount() {
-		const numOfMoves = Math.floor(Math.random() * 5) + 3;
-		console.log(numOfMoves);
-
-		for (let i = 0; i < numOfMoves; i++) {
-			this.randomBoard();
-		}
+		this.handleRandomMoves();
 	}
 
 	render() {
